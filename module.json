@@ -1,0 +1,8 @@
+{
+	"name": "Origami",
+	"slug": "origami",
+	"version": "1.0",
+	"description": "Theme Management for Rakko",
+	"enabled": true,
+	"order": 0
+}
