@@ -2,7 +2,7 @@
 
 {{-- Web site Title --}}
 @section('title')
-{{ Lang::choice('kotoba::account.profile', 2) }} :: @parent
+{{ Lang::choice('kotoba::cms.theme', 2) }} :: @parent
 @stop
 
 @section('styles')
@@ -30,35 +30,13 @@ oTable =
 <div class="row">
 <h1>
 	<i class="fa fa-gears fa-lg"></i>
-		{{ Lang::choice('kotoba::module.module', 2) }}
+		{{ trans('kotoba::general.active') }}:&nbsp;{{ $activeTheme }}
 	<hr>
 </h1>
 </div>
 
 
-<div class="row">
-
-<table id="table" class="table table-striped table-hover">
-	<thead>
-		<tr>
-			<th></th>
-			<th>{{ trans('kotoba::table.name') }}</th>
-			<th>{{ trans('kotoba::table.slug') }}</th>
-			<th>{{ trans('kotoba::table.version') }}</th>
-			<th>{{ trans('kotoba::table.description') }}</th>
-			<th>{{ trans('kotoba::table.enabled') }}</th>
-			<th>{{ trans('kotoba::table.order') }}</th>
-
-			<th>{{ Lang::choice('kotoba::table.action', 2) }}</th>
-		</tr>
-	</thead>
-	<tbody></tbody>
-</table>
-
-</div>
-
-
-@if (count($themes))
+@if (count($collection))
 
 <div class="row">
 <table id="table" class="table table-striped table-hover">
@@ -69,19 +47,19 @@ oTable =
 			<th>{{ trans('kotoba::table.author') }}</th>
 			<th>{{ trans('kotoba::table.description') }}</th>
 			<th>{{ trans('kotoba::table.version') }}</th>
-			<th>{{ Lang::choice('lingos::table.actions', 2) }}</th>
+			<th>{{ Lang::choice('kotoba::table.action', 2) }}</th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach ($themes as $theme)
 			<tr>
-				<td>{{ $theme->name }}</td>
-				<td>{{ $theme->slug }}</td>
-				<td>{{ $theme->author }}</td>
-				<td>{{ $theme->description }}</td>
-				<td>{{ $theme->version }}</td>
+				<td>{{ $collection[$theme]['name'] }}</td>
+				<td>{{ $collection[$theme]['slug'] }}</td>
+				<td>{{ $collection[$theme]['author'] }}</td>
+				<td>{{ $collection[$theme]['description'] }}</td>
+				<td>{{ $collection[$theme]['version'] }}</td>
 				<td>
-					<a href="/themes/{{ $theme->slug }}" class="btn btn-primary" title="{{ trans('kotoba::button.edit') }}">
+					<a href="/admin/themes/{{ $collection[$theme]['slug'] }}" class="btn btn-primary" title="{{ trans('kotoba::button.edit') }}">
 						<i class="fa fa-pencil fa-fw"></i>
 						{{ trans('kotoba::button.edit') }}
 					</a>

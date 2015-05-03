@@ -1,20 +1,25 @@
 <?php
 namespace App\Modules\Origami\Http\Controllers;
 
-//use App\Modules\Origami\Http\Domain\Models\Module;
-//use App\Modules\Origami\Http\Domain\Repositories\ThemeRepository;
+//use App\Modules\Origami\Http\Domain\Models\Theme;
+use App\Modules\Origami\Http\Domain\Repositories\ThemeRepository;
 
 //use Illuminate\Http\Request;
 use App\Modules\Origami\Http\Requests\DeleteRequest;
-use App\Modules\Origami\Http\Requests\ThemeCreateRequest;
+//use App\Modules\Origami\Http\Requests\ThemeCreateRequest;
 use App\Modules\Origami\Http\Requests\ThemeUpdateRequest;
 
-//use Datatables;
+use Config;
 use Flash;
 use Theme;
 
 class ThemesController extends OrigamiController {
 
+/*
+{!! Theme::asset('themeslug::css/bootstrap.css') !!}
+{!! Theme::asset('themeslug::js/bootstrap.js') !!}
+Theme::view('modules.yourmodule.your.view')
+*/
 	/**
 	 * The UserRepository instance.
 	 *
@@ -28,8 +33,13 @@ class ThemesController extends OrigamiController {
 	 * @param  App\Modules\Kagi\Http\Domain\Repositories\ModuleRepository $module
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(
+//			Request $request,
+			ThemeRepository $themeRepo
+		)
 	{
+//		$this->request = $request;
+		$this->themeRepo = $themeRepo;
 // middleware
 		$this->middleware('auth');
 		$this->middleware('admin');
@@ -42,23 +52,49 @@ class ThemesController extends OrigamiController {
 	 */
 	public function index()
 	{
-//dd("loaded");
-$slug						= Theme::getProperty('bootstrap::slug', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.slug'));
-$name						= Theme::getProperty('theme::name', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.name'));
-$author						= Theme::getProperty('theme::author', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.author'));
-$description				= Theme::getProperty('bootstrap::description', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.description'));
-$version					= Theme::getProperty('theme::version', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.version'));
+// dd("loaded");
 
-$activeTheme				= Theme::getActive();
+// $slug						= Theme::getProperty('bootstrap::slug', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.slug'));
+// $name						= Theme::getProperty('theme::name', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.name'));
+// $author						= Theme::getProperty('theme::author', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.author'));
+// $description				= Theme::getProperty('bootstrap::description', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.description'));
+// $version					= Theme::getProperty('theme::version', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.version'));
+
+		$activeTheme				= Theme::getActive();
+		$themes						= Theme::all();
+		//dd($themes);
+
+		$collection = new \Illuminate\Support\Collection();
+		foreach ($themes as $theme) {
+			$json_string = Config::get('themes.path', public_path('themes')) . '/' . $theme . '/theme.json';
+			$jsondata = file_get_contents($json_string);
+			$collection[$theme] = json_decode($jsondata, true);
+		}
 
 
-//dd($description);
-
-		$themes = Theme::all();
-dd($themes);
+// dd($collection);
+// dd($collection['themeSkeleton']['slug']);
+// foreach ($themes as $theme) {
+//
+// $slug_property = $theme . '::slug';
+// //dd($slug_property);
+//
+// //dd(Theme::getProperty($slug_property, trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.slug')));
+//
+// $slug = Theme::getProperty($slug_property, trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.slug'));
+// print_r($slug);
+//
+// }
+// dd($slug);
+//
+//
+//
+// dd($themes);
 
 		return View('origami::themes.index',
 			compact(
+				'activeTheme',
+				'collection',
 				'themes'
 			));
 
@@ -102,7 +138,7 @@ dd("store");
 	 */
 	public function show($id)
 	{
-//dd("show");
+dd("show");
 		return View('origami::modules.show',  $this->module->show($id));
 	}
 
@@ -112,10 +148,29 @@ dd("store");
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+	public function edit($theme)
 	{
 //dd("edit");
-		return View('origami::modules.edit',  $this->module->edit($id));
+//		$theme = $this->themeRepo->edit($slug);
+//		return View('origami::themes.edit',  $this->module->edit($id));
+
+		$activeTheme				= Theme::getActive();
+		$slug						= Theme::getProperty( $theme . '::slug', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.slug'));
+		$name						= Theme::getProperty( $theme . '::name', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.name'));
+		$author						= Theme::getProperty( $theme . '::author', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.author'));
+		$description				= Theme::getProperty( $theme . '::description', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.description'));
+		$version					= Theme::getProperty( $theme . '::version', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.version'));
+//dd($slug);
+
+		return View('origami::themes.edit',
+			compact(
+				'activeTheme',
+				'slug',
+				'name',
+				'author',
+				'description',
+				'version'
+			));
 	}
 
 	/**
@@ -127,14 +182,32 @@ dd("store");
 	 */
 	public function update(
 		ThemeUpdateRequest $request,
-		$id
+		$slug
 		)
 	{
-//dd($request->enabled);
+//dd($request);
 
-		$this->module->update($request->all(), $id);
-		Flash::success( trans('kotoba::module.success.update') );
-		return redirect('origami');
+//		$activeTheme				= $request->activeTheme;
+		$activeTheme				= Theme::getActive();
+		$slug						= $request->slug;
+		$name						= $request->name;
+		$author						= $request->author;
+		$description				= $request->description;
+		$version					= $request->version;
+		$enabled					= $request->enabled;
+
+		if ($slug != $activeTheme && $enabled = 1) {
+			Theme::setActive($slug);
+		}
+
+		Theme::setProperty( $slug . '::slug', $slug);
+		Theme::setProperty( $slug . '::name', $name);
+		Theme::setProperty( $slug . '::author', $author);
+		Theme::setProperty( $slug . '::description', $description);
+		Theme::setProperty( $slug . '::version', $version);
+
+		Flash::success( trans('kotoba::cms.success.theme_update') );
+		return redirect('admin/themes');
 	}
 
 	/**

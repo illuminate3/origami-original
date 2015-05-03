@@ -4,7 +4,7 @@ namespace App\Modules\Origami\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Config;
 
-class ModuleUpdateRequest extends FormRequest {
+class ThemeUpdateRequest extends FormRequest {
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class ModuleUpdateRequest extends FormRequest {
 	public function rules()
 	{
 		return [
-			'enabled'					=> '',
+			'slug'						=> 'required|alpha_num',
 		];
 	}
 

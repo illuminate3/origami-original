@@ -2,18 +2,16 @@
 
 {{-- Web site Title --}}
 @section('title')
-{{ Lang::choice('kotoba::module.module', 2) }} :: @parent
+{{ Lang::choice('kotoba::cms.theme', 1) }} :: @parent
 @stop
 
 @section('styles')
 @stop
 
 @section('scripts')
-	<script type="text/javascript" src="{{ asset('assets/js/restfulizer.js') }}"></script>
 @stop
 
 @section('inline-scripts')
-	var text_confirm_message = '{{ trans('kotoba::account.ask.delete') }}';
 @stop
 
 
@@ -23,88 +21,67 @@
 <div class="row">
 <h1>
 	<p class="pull-right">
-	<a href="/admin/origami" class="btn btn-default" title="{{ trans('kotoba::button.back') }}">
+	<a href="/admin/themes" class="btn btn-default" title="{{ trans('kotoba::button.back') }}">
 		<i class="fa fa-chevron-left fa-fw"></i>
 		{{ trans('kotoba::button.back') }}
 	</a>
 	</p>
 	<i class="fa fa-edit fa-lg"></i>
-		{{ trans('kotoba::general.command.edit') }}
+		{{ trans('kotoba::general.command.edit') }}:&nbsp;{{ Lang::choice('kotoba::cms.theme', 1) }}
 	<hr>
 </h1>
 </div>
 
 
 <div class="row">
-{!! Form::model(
-	$module,
-	[
-		'route' => ['admin.origami.update', $module->id],
-		'method' => 'PATCH',
-		'class' => 'form'
-	]
-) !!}
+{!! Form::open([
+	'route' => array('themes.update', $slug)
+]) !!}
+{!! Form::hidden('activeTheme', $activeTheme) !!}
 
+<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon"><i class="fa fa-gavel fa-fw"></i></span>
+		<input type="text" id="name" name="name" value="{{ $name }}" placeholder="{{ trans('kotoba::general.name') }}" class="form-control" autofocus="autofocus">
+</div>
+</div>
 
-<div class="panel panel-default">
-	<div class="panel-heading">
-		<h3 class="panel-title">
-			{{ trans('kotoba::general.information') }}:
-		</h3>
-	</div><!-- ./panel-heading -->
-	<div class="panel-body">
+<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon"><i class="fa fa-gavel fa-fw"></i></span>
+		<input type="text" id="slug" name="slug" value="{{ $slug }}" placeholder="{{ trans('kotoba::general.slug') }}" class="form-control">
+</div>
+</div>
 
-		<div class="table-responsive">
-		<table class="table table-striped table-hover">
-			<tbody>
-				<tr>
-					<td>
-						{{ trans('kotoba::general.name') }}
-					</td>
-					<td>
-						{{ $module->name }}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						{{ trans('kotoba::general.slug') }}
-					</td>
-					<td>
-						{{ $module->slug }}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						{{ trans('kotoba::general.description') }}
-					</td>
-					<td>
-						{{ $module->description }}
-					</td>
-				</tr>
-				<tr>
-					<td>
-						{{ trans('kotoba::general.version') }}
-					</td>
-					<td>
-						{{ $module->version }}
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		</div><!-- ./responsive -->
+<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon"><i class="fa fa-gavel fa-fw"></i></span>
+		<input type="text" id="author" name="author" value="{{ $author }}" placeholder="{{ trans('kotoba::general.author') }}" class="form-control">
+</div>
+</div>
 
-	</div><!-- ./panel-body -->
-</div><!-- ./panel -->
+<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon"><i class="fa fa-gavel fa-fw"></i></span>
+		<input type="text" id="description" name="description" value="{{ $description }}" placeholder="{{ trans('kotoba::general.description') }}" class="form-control">
+</div>
+</div>
 
-<hr>
+<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon"><i class="fa fa-gavel fa-fw"></i></span>
+		<input type="text" id="version" name="version" value="{{ $version }}" placeholder="{{ trans('kotoba::general.version') }}" class="form-control">
+</div>
+</div>
+
 
 <label class="checkbox-inline">
-	<input type="checkbox" id="enabled" name="enabled" value="1" {{ $module->present()->enabledCheck }}>
-	&nbsp;{{ trans('kotoba::general.enabled') }}
+	<input type="checkbox" id="enabled" name="enabled" value="1" {{ $slug }}>
+	&nbsp;{{ trans('kotoba::general.enable') }}
 </label>
 
-
 <hr>
+
 
 <div class="form-group">
 	<input class="btn btn-success btn-block" type="submit" value="{{ trans('kotoba::button.save') }}">
@@ -115,7 +92,7 @@
 
 <div class="row">
 <div class="col-sm-6">
-	<a href="/admin/origami" class="btn btn-default btn-block" title="{{ trans('kotoba::button.cancel') }}">
+	<a href="/admin/thmese" class="btn btn-default btn-block" title="{{ trans('kotoba::button.cancel') }}">
 		<i class="fa fa-times fa-fw"></i>
 		{{ trans('kotoba::button.cancel') }}
 	</a>
