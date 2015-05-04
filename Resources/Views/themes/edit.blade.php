@@ -76,9 +76,10 @@
 
 
 <label class="checkbox-inline">
-	<input type="checkbox" id="enabled" name="enabled" value="1" {{ $slug }}>
+	<input type="checkbox" id="enabled" name="enabled" value="1" {{ $checked }}>
 	&nbsp;{{ trans('kotoba::general.enable') }}
 </label>
+
 
 <hr>
 

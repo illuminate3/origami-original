@@ -1,14 +1,12 @@
 <?php
 namespace App\Modules\Origami\Http\Controllers;
 
-//use App\Modules\Origami\Http\Domain\Models\Theme;
-use App\Modules\Origami\Http\Domain\Repositories\ThemeRepository;
-
 //use Illuminate\Http\Request;
 use App\Modules\Origami\Http\Requests\DeleteRequest;
 //use App\Modules\Origami\Http\Requests\ThemeCreateRequest;
 use App\Modules\Origami\Http\Requests\ThemeUpdateRequest;
 
+use Cache;
 use Config;
 use Flash;
 use Theme;
@@ -20,12 +18,6 @@ class ThemesController extends OrigamiController {
 {!! Theme::asset('themeslug::js/bootstrap.js') !!}
 Theme::view('modules.yourmodule.your.view')
 */
-	/**
-	 * The UserRepository instance.
-	 *
-	 * @var App\Modules\Kagi\Http\Domain\Repositories\UserRepository
-	 */
-	protected $theme_repo;
 
 	/**
 	 * Create a new UserController instance.
@@ -33,13 +25,8 @@ Theme::view('modules.yourmodule.your.view')
 	 * @param  App\Modules\Kagi\Http\Domain\Repositories\ModuleRepository $module
 	 * @return void
 	 */
-	public function __construct(
-//			Request $request,
-			ThemeRepository $themeRepo
-		)
+	public function __construct()
 	{
-//		$this->request = $request;
-		$this->themeRepo = $themeRepo;
 // middleware
 		$this->middleware('auth');
 		$this->middleware('admin');
@@ -54,15 +41,9 @@ Theme::view('modules.yourmodule.your.view')
 	{
 // dd("loaded");
 
-// $slug						= Theme::getProperty('bootstrap::slug', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.slug'));
-// $name						= Theme::getProperty('theme::name', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.name'));
-// $author						= Theme::getProperty('theme::author', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.author'));
-// $description				= Theme::getProperty('bootstrap::description', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.description'));
-// $version					= Theme::getProperty('theme::version', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.version'));
-
 		$activeTheme				= Theme::getActive();
 		$themes						= Theme::all();
-		//dd($themes);
+//dd($activeTheme);
 
 		$collection = new \Illuminate\Support\Collection();
 		foreach ($themes as $theme) {
@@ -162,9 +143,17 @@ dd("show");
 		$version					= Theme::getProperty( $theme . '::version', trans('kotoba::general.error.no_data') . ':' . trans('kotoba::general.version'));
 //dd($slug);
 
+		if ($activeTheme == $slug ) {
+			$checked = 'checked';
+		} else {
+			$checked = null;
+		}
+//dd($checked);
+
 		return View('origami::themes.edit',
 			compact(
 				'activeTheme',
+				'checked',
 				'slug',
 				'name',
 				'author',
@@ -198,6 +187,7 @@ dd("show");
 
 		if ($slug != $activeTheme && $enabled = 1) {
 			Theme::setActive($slug);
+			Cache::forever('theme', $slug);
 		}
 
 		Theme::setProperty( $slug . '::slug', $slug);
