@@ -93,7 +93,7 @@
 
 <div class="row">
 <div class="col-sm-6">
-	<a href="/admin/thmese" class="btn btn-default btn-block" title="{{ trans('kotoba::button.cancel') }}">
+	<a href="/admin/themes" class="btn btn-default btn-block" title="{{ trans('kotoba::button.cancel') }}">
 		<i class="fa fa-times fa-fw"></i>
 		{{ trans('kotoba::button.cancel') }}
 	</a>

@@ -185,7 +185,7 @@ dd("show");
 		$version					= $request->version;
 		$enabled					= $request->enabled;
 
-		if ($slug != $activeTheme && $enabled = 1) {
+		if ( ($slug != $activeTheme) && ($enabled == 1) ) {
 			Theme::setActive($slug);
 			Cache::forever('theme', $slug);
 		}
