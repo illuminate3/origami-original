@@ -10,22 +10,22 @@ class ModuleSeeder extends Seeder {
 	{
 
 // Module Information
-		$module = array(
-			'name'					=> 'Origami',
-			'slug'					=> 'origami',
-			'version'				=> '1.0',
-			'description'			=> 'Origami is a Rakko module that provides simple Theme Managent ability',
-			'enabled'				=> 1,
-			'order'					=> 0
-		);
-
-// Insert Module Information
-		if (Schema::hasTable('modules'))
-		{
-
-			DB::table('modules')->insert( $module );
-
-		}
+// 		$module = array(
+// 			'name'					=> 'Origami',
+// 			'slug'					=> 'origami',
+// 			'version'				=> '1.0',
+// 			'description'			=> 'Origami is a Rakko module that provides simple Theme Managent ability',
+// 			'enabled'				=> 1,
+// 			'order'					=> 0
+// 		);
+//
+// // Insert Module Information
+// 		if (Schema::hasTable('modules'))
+// 		{
+//
+// 			DB::table('modules')->insert( $module );
+//
+// 		}
 
 // Permission Information
 		$permissions = array(
