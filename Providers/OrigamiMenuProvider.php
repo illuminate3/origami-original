@@ -4,6 +4,7 @@ namespace App\Modules\Origami\Providers;
 use App\Providers\MenuServiceProvider;
 
 use Auth;
+use Lang;
 use Menu;
 
 class OrigamiMenuProvider extends MenuServiceProvider {
