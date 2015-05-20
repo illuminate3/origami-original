@@ -20,8 +20,8 @@ class OrigamiMenuProvider extends MenuServiceProvider {
 //		$menu = Menu::get('navbar');
 
 // right side drop down
-// 		$menu = Menu::get('admin');
-// 		$menu->add('Themes', 'admin/themes');
+		$menu = Menu::get('admin');
+		$menu->add(Lang::choice('kotoba::cms.theme', 2), 'admin/themes');
 
 	}
 
