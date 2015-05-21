@@ -6,6 +6,8 @@ use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
+use Theme;
+
 class OrigamiController extends Controller
 {
 
@@ -35,8 +37,8 @@ class OrigamiController extends Controller
 	 */
 	public function welcome()
 	{
-//dd("loaded");
-		return View('origami::origami');
+		return Theme::View('modules.origami.origami');
+//		return View('origami::origami');
 	}
 
 }
