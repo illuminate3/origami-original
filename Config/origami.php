@@ -1,8 +1,9 @@
 <?php
 
-return [
+// php artisan vendor:publish --provider="App\Modules\Origami\Providers\OrigamiServiceProvider" --tag="config"
 
-//vendor:publish --provider="App\Modules\Origami\Providers\OrigamiServiceProvider" --tag="config"
+
+return [
 
 /*
 |--------------------------------------------------------------------------
