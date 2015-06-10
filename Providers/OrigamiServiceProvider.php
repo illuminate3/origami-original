@@ -18,7 +18,7 @@ class OrigamiServiceProvider extends ServiceProvider
 	{
 
 		App::register('App\Modules\Origami\Providers\RouteServiceProvider');
-		App::register('App\Modules\Origami\Providers\OrigamiMenuProvider');
+//		App::register('App\Modules\Origami\Providers\OrigamiMenuProvider');
 
 		$this->mergeConfigFrom(
 			__DIR__.'/../Config/origami.php', 'origami'
